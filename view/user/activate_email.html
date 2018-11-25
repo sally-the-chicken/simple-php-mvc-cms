@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <style media="only screen and (max-width: 480px)" type='text/css'>
+        <!--
+        body {
+            position: relative !important;
+            margin:0 !important;
+        }
+
+        table[class="body-table"] {
+            width: 320px !important;
+            position: absolute !important;
+            margin: 0 auto !important;
+            -webkit-text-size-adjust:none !important;
+        }
+
+        td[class="logo"] {
+            text-align: center !important;
+        }
+
+        td[class="logo"] img {
+            width: 240px !important;
+        }
+
+        table[class="icons"] {
+            padding-top: 10px !important;
+        }
+
+        table[id="bell"] {
+            padding: 0 20px 0 24px !important;
+            width: 70px !important;
+        }
+
+        table[id="sync"] {
+            width: 64px !important;
+        }
+        table[id="star"] {
+            width: 95px !important;
+            padding-right: 16px !important;
+        }
+
+        table[class="icon"] table{
+            height: 70px !important;
+        }
+
+        table[id="bell"] table {
+            width: 70px !important;
+        }
+
+        table[id="sync"] table {
+            width: 64px !important;
+        }
+
+        table[id="star"] table {
+            width: 95px !important;
+        }
+
+        table[class="icon-img"] td {
+            text-align: center !important;
+        }
+
+        table[class="icon-description"] td {
+            vertical-align: top !important;
+            font-size: 13px !important;
+            padding: 9px 0 0 0 !important;
+        }
+
+        tr[id="title"] td {
+            font-size: 16px !important;
+            padding: 24px 0 0 24px !important;
+        }
+
+        tr[id="content"] td {
+            padding: 38px 0 0 16px !important;
+        }
+
+        tr[id="activationLink"] td {
+            padding: 0 0 20px 16px !important;
+        }
+
+        tr[class="legal"] td {
+            padding-left: 10px !important;
+        }
+
+        tr[class="legalInfo"] td {
+            padding-left: 10px !important;
+        }
+        -->
+    </style>
+    <title></title>
+</head>
+<body>
+    <table class="body-table" style="width:550px;font-family: arial,helvetica neue,helvetica,sans-serif;line-height:1.5;background-color:#fff;bgcolor:#fff;margin-left:10px;margin;margin-right:10px">
+        <tr>
+            <td class="logo"><img src="https://res.gohome.com.hk/images/logo-v2016.png" style="margin-top:14px;margin-bottom:14px;"></td>
+        </tr>
+        <tr class="header-separator">
+            <td style="bgcolor:#0081c6;background-color:#0081c6;padding:0;height:1;line-height:4px;font-size:4px">&nbsp;</td>
+        </tr>
+        <tr id="title">
+            <td style="color:#262626;padding-top:34px;padding-left:9px;font-size:26px;font-weight:bold">Welcome to News GoHome CMS!</td>
+        </tr>
+        <tr id="content">
+            <td style="color:#585858; padding:58px 0 0 0;font-size: 15px;">Follow the link below to start using your account:</td>
+        </tr>
+        <tr id="activationLink">
+            <td style="padding-top:4px;font-size: 15px;">
+                <a href="<?php echo $activation_key_link; ?>" style="color:#0081c6;text-decoration: none;"><?php echo $activation_key_link; ?></a>
+            </td>
+        </tr>
+       
+        <tr class="line-separator">
+            <td style="bgcolor:#e8e8e8; background-color:#e8e8e8;padding:0;height:1;line-height:4px;font-size:4px">&nbsp;</td>
+        </tr>
+    </table>
+</body>
+</html>

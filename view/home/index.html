@@ -1,0 +1,29 @@
+
+<?php include WEBROOT."/view/nav.html" ?>
+<main role="main">
+	<div class="jumbotron">
+		<div class="container">
+			<h1 class="display-3">Hello, <?php echo $_SESSION[SESS_USER_VAR]->display_name ?>!</h1>
+		</div>
+	</div>
+
+	<div class="container">
+		<?php include WEBROOT."/view/msg.html" ?>
+		<div class="row">
+			<div class="col-md-4">
+				<h2>Articles</h2>
+				<p>CRUD screen for articles</p>
+				<p><a class="btn btn-secondary" href="<?php echo APP_DIR ?>article/" role="button">View article list &raquo;</a></p>
+			</div>
+			<div class="col-md-4">
+				<h2>User Admin</h2>
+				<p>CRUD screen for user admin</p>
+				<p><a class="btn btn-secondary" href="<?php echo APP_DIR ?>user/" role="button">View user list &raquo;</a></p>
+			</div>
+		</div>
+
+		<hr>
+
+	</div> <!-- /container -->
+
+</main>

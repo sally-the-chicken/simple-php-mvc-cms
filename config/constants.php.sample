@@ -1,0 +1,12 @@
+<?php 
+
+define('SESS_USER_VAR', 'simple-php-mvc-cms-user-model');
+
+define('DIR_ASSETS',       APP_DIR.'assets/');
+define('DIR_ASSETS_JS',    DIR_ASSETS.'js/');
+define('DIR_ASSETS_CSS',   DIR_ASSETS.'css/');
+define('DIR_ASSETS_IMG',   DIR_ASSETS.'images/');
+
+define('USER_PASSWORD_SALT', '6roHjBijWtztkUHH');
+
+?>

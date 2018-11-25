@@ -1,0 +1,91 @@
+<?php include WEBROOT."/view/nav.html" ?>
+<main role="main">
+    <div class="container">
+        <h1 class="h3 mb-3 font-weight-normal">
+            User Admin
+        </h1>
+        <?php include WEBROOT."/view/msg.html" ?>
+        <div class="wrapper-form">
+            <form class="form-user" action="<?php echo APP_DIR.'user/add/' ?>" method="POST">
+                <div class="form-group">
+                    <div class="form-row">
+                        <?php echo Util_Form::spit_out_input_label($inputs, 'login'); ?>
+                        <?php echo Util_Form::spit_out_form_input($inputs, 'login'); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <?php echo Util_Form::spit_out_input_label($inputs, 'display_name'); ?>
+                        <?php echo Util_Form::spit_out_form_input($inputs, 'display_name'); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <?php echo Util_Form::spit_out_input_label($inputs, 'email'); ?>
+                        <?php echo Util_Form::spit_out_form_input($inputs, 'email'); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <?php echo Util_Form::spit_out_input_label($inputs, 'roles'); ?>
+                        <?php echo Util_Form::spit_out_form_input($inputs, 'roles', 'sel_roles'); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        Available Resources:
+                        <ul class="resource-ids" id="resource_ids">
+                            <?php foreach ($resources as $id=>$resource): ?>
+                            <li resource_name="<?php echo $resource['name'] ?>"><?php echo $resource['description']; ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <input name="id" type="hidden" value="<?php if ($user->id) echo $user->id;?>" />
+                        <input class="btn btn-primary" type="submit" value="Save User" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="table-responsive">
+                <table id="user_tbl" class="table table-striped table-bordered" style="width:100%" width="100%">
+                    <thead>
+                        <tr>
+                            <?php foreach ($table_cols as $table_col) {?>
+                            <th>
+                                <?php echo $table_col; ?>
+                            </th>
+                            <?php } ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($users as $user) {?>
+                        <tr>
+                            <?php foreach (array_keys($table_cols) as $key) {?>
+                            <td>
+                                <?php echo $user[$key]; ?>
+                            </td>
+                            <?php } ?>
+                        </tr>
+                        <?php } ?>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <?php foreach ($table_cols as $table_col) {?>
+                            <th>
+                                <?php echo $table_col; ?>
+                            </th>
+                            <?php } ?>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</main><!-- /.container -->

@@ -1,0 +1,18 @@
+<?php
+
+$config_db = array(
+        'prod' => array(
+                'db_server' => '${DB_HOST}', 
+                'db_user' => '${DB_USER}', 
+                'db_pass' => '${DB_PASSWORD}', 
+                'db_name' => '${DB_NAME}'
+        ),
+        'dev' => array(
+                'db_server' => '127.0.0.1', 
+                'db_user' => '${DB_USER}', 
+                'db_pass' => '${DB_PASSWORD}', 
+                'db_name' => 'simple_php_mvc_cms'
+        )
+);
+
+?>

@@ -1,0 +1,107 @@
+
+<style>
+.resource-ids li {width: auto !important; height: 24px; font-size: 1.0em; margin: 3px; padding: 0.4em;border: 1px solid black; background-color: white; display: block;}
+.useradmin-adduser label {min-width: 150px;}
+</style>
+
+<div class="container">
+    <div class="top">
+        <?php include WEBROOT."/view/_nav.html" ?>
+        <?php if (!empty($msg)) {?>
+            <div class="alert alert-info"><?php echo $msg; ?></div>
+        <?php }?>
+        <?php if (!empty($errmsg)) {?>
+            <div class="alert alert-error"><?php echo $errmsg; ?></div>
+        <?php }?>
+    </div>
+</div>
+    
+<div class="container">
+    <div class="well-box useradmin-adduser">
+        <form action="<?php echo $_SERVER['PHP_SELF'];?>?action=useradmin_adduser" method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    <label>Login:<br /><span style="color:#999;font-size:smaller;">alpha-numeric _ .</span></label>
+                    <input type="text" name="user_login" value=""/>
+                </div>
+                <div class="row">
+                    <label>Email:</label>
+                    <input type="text" name="user_email" value=""/>
+                </div>
+                <div class="row">
+                    <label>Display Name:</label>
+                    <input type="text" name="user_display_name" value=""/>
+                </div>
+                <div class="row">
+                    <label>Roles:</label>
+                    <select multiple="multiple" class="role-select" id="role_ids" name="role_ids[]">
+                    <?php foreach ($roles_with_permissions as $role_id=>$role_info) :?>
+                        <option resource_names='<?php echo json_encode(array_keys($role_info['resources'])); ?>' value='<?php echo $role_id; ?>'><?php echo $role_info['role_name']; ?></option>
+                    <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="row">
+                    <label>Available Resources:</label>
+                    <ul class="resource-ids" id="resource_ids">
+                        <?php foreach ($resources as $id=>$resource): ?>
+                        <li resource_name="<?php echo $resource['name'] ?>"><?php echo $resource['description']; ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <div class="row">
+                    <label></label>
+                    <span><input class="button" type="submit" value="Add New User" /></span>
+                </div>
+        </form>
+    </div>
+</div>
+
+<div class="container">
+<table id="user_tbl" class="user-tbl">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Login</th>
+            <th>Email</th>
+            <th>Display Name</th>
+            <th>Last Login</th>
+            <th>Roles</th>
+            <th>Permissions</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>ID</th>
+            <th>Login</th>
+            <th>Email</th>
+            <th>Display Name</th>
+            <th>Last Login</th>
+            <th>Roles</th>
+            <th>Permissions</th>
+        </tr>
+    </tfoot>
+    <tbody>
+        <?php foreach ($users as $id=>$user){ ?>
+            <tr class="<?php echo ($user['status'] == 1) ? 'active':'inactive'; ?>">
+                <td><?php echo $user['id']; ?></td>
+                <td><?php echo $user['login']; ?></td>
+                <td><?php echo $user['email']; ?></td>
+                <td><?php echo $user['display_name']; ?></td>
+                <td>
+                <div><?php echo $user['last_login_time']; ?></div>
+                <div><?php echo '('.$user['last_login_ip'].')'; ?></div>
+                </td>
+                <td>
+                <?php foreach ($user['role'] as $role): ?>
+                    <div><?php echo $role['role_name'] ?></div>
+                <?php endforeach; ?>
+                </td>
+                <td>
+                <?php foreach ($user['permission'] as $permission): ?>
+                    <div><?php echo $permission['description'] ?></div>
+                <?php endforeach; ?>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+</div>

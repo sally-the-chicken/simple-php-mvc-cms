@@ -1,0 +1,43 @@
+<?php include WEBROOT."/view/nav.html" ?>
+<main role="main">
+    <div class="container">
+        <h1 class="h3 mb-3 font-weight-normal">
+            <?php echo $h1 ?>
+        </h1>
+        <?php include WEBROOT."/view/msg.html" ?>
+        <div class="wrapper-form">
+            <form class="form-article" action="<?php echo $form_action ?>" method="POST">
+                <div class="form-group">
+                    <div class="form-row">
+                        <?php echo Util_Form::spit_out_input_label($inputs, 'status'); ?>
+                        <?php echo Util_Form::spit_out_form_input($inputs, 'status'); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <?php echo Util_Form::spit_out_input_label($inputs, 'title'); ?>
+                        <?php echo Util_Form::spit_out_form_input($inputs, 'title'); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <?php echo Util_Form::spit_out_input_label($inputs, 'content'); ?>
+                        <?php echo Util_Form::spit_out_form_input($inputs, 'content'); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <?php echo Util_Form::spit_out_input_label($inputs, 'friendly_url'); ?>
+                        <?php echo Util_Form::spit_out_form_input($inputs, 'friendly_url'); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <input name="id" type="hidden" value="<?php if ($article->id) echo $article->id;?>" />
+                        <input class="btn btn-primary" type="submit" value="Save Article" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</main><!-- /.container -->

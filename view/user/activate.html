@@ -1,0 +1,40 @@
+<body id="login">
+	<div class="wrapper">
+        <h1>Activate</h1>
+        <div class="box">
+            <form id="frm_login" method="POST" action="/app/activate/">
+                <div class="row">
+                    <div class="label">Username</div>
+                    <input value="<?php echo $login; ?>" disabled />
+                </div>
+                <div class="row">
+                    <div class="label">Password</div>
+                    <input type="password" name="password" />
+                </div>
+                <div class="row">
+                	<div class="label"></div>
+                    <ul class="remarks">
+                    	<li>alphanumeric + symbol</li>
+                        <li>8-20 characters</li>
+                        <li>at least one number</li>
+                        <li>at least one letter</li>
+                        <li>no space</li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="label">Re-type Password</div>
+                    <input type="password" name="re_password" />
+                </div>
+                <?php if (!empty($errmsg)) {?>
+                    <div class="alert alert-error"><?php echo $errmsg; ?></div>
+                <?php }?>
+                <div class="row2">
+                    <button>Activate Account</button>
+                </div>
+                <div class="row logoDiv">
+                    <a href="http://www.gohome.com.hk" class="logo" target="_blank"></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="<?php echo APP_DIR ?>">Simple PHP MVC CMS</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+        aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item <?php if ($controller == 'Controller_Home') echo 'active'; ?>">
+                <a class="nav-link" href="<?php echo APP_DIR ?>home/">Home</a>
+            </li>
+            <?php if ($_SESSION[SESS_USER_VAR]->can('articles.view')):?>
+            <li class="nav-item <?php if ($controller == 'Controller_Article') echo 'active'; ?>">
+                <a class="nav-link" href="<?php echo APP_DIR ?>article/">Article</a>
+            </li>
+            <?php endif; ?>
+            <?php if ($_SESSION[SESS_USER_VAR]->can('users.view')):?>
+            <li class="nav-item <?php if ($controller == 'Controller_User') echo 'active'; ?>">
+                <a class="nav-link" href="<?php echo APP_DIR ?>user/">User</a>
+            </li>
+            <?php endif; ?>
+            <li class="nav-item ">
+                <a class="nav-link" href="<?php echo APP_DIR ?>login/logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
