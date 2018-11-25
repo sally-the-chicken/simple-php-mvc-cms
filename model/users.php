@@ -220,7 +220,7 @@ class Model_Users extends Base_Model
         return $permissions;
     }
 
-    protected function _find_roles($user_id)
+    protected function _find_roles($user_id = null)
     {
 
         $roles = array();
