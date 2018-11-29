@@ -4,6 +4,12 @@ Simple PHP MVC CMS Sample
 This is a simple CMS using [simple-php-mvc-base module](https://github.com/sally-the-chicken/simple-php-mvc-base).  
 If you would like a barebone application and customize it yourself, and do not want to use any conventional frameworks, this might be for you.  
 
+Sample
+------
+[https://simple-php-mvc-cms.sallyandchicken.com/](https://simple-php-mvc-cms.sallyandchicken.com/)
+Username: admin
+Password: Test1234
+
 Setup
 ------
 
