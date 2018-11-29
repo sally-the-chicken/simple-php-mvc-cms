@@ -84,6 +84,9 @@ class Controller_Article extends Controller_App
 
         $model_article = new Model_Articles();
         $articles = $model_article->get_all_with_assocs($conditions, $order, $length, $start, $searchword);
+        if (empty($articles)) {
+            $articles = array();
+        }
         $articles_cnt = $model_article->get_all_with_assocs_cnt();
         $articles_filtered_cnt = count($articles);
 

@@ -41,12 +41,14 @@
                         </ul>
                     </div>
                 </div>
+                <?php if ($_SESSION[SESS_USER_VAR]->can('users.edit')) { ?>
                 <div class="form-group">
                     <div class="form-row">
                         <input name="id" type="hidden" value="<?php if ($user->id) echo $user->id;?>" />
                         <input class="btn btn-primary" type="submit" value="Save User" />
                     </div>
                 </div>
+                <?php } ?>
             </form>
         </div>
     </div>
