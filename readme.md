@@ -7,7 +7,9 @@ If you would like a barebone application and customize it yourself, and do not w
 Sample
 ------
 [https://simple-php-mvc-cms.sallyandchicken.com/](https://simple-php-mvc-cms.sallyandchicken.com/)
+
 Username: admin
+
 Password: Test1234
 
 Setup
