@@ -177,7 +177,7 @@ class Controller_User extends Controller_App
             'login' => 'Login',
             'email' => 'Email',
             'display_name' => 'Display Name',
-            'status' => 'Last Login',
+            'last_login_time' => 'Last Login',
             'roles' => 'Roles',
             'permissions' => 'Permissions',
         );
@@ -205,7 +205,7 @@ class Controller_User extends Controller_App
 
         extract($contents);
         ob_start();
-        include WEBROOT . 'view/users/activate_email.html';
+        include WEBROOT . 'view/user/activate_email.html';
         $returned = ob_get_contents();
         ob_end_clean();
 
