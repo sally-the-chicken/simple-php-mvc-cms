@@ -25,8 +25,8 @@ class Controller_User extends Controller_App
 
         foreach ($roles_with_permissions as $roles_with_permission) {
             $inputs['roles']['options'][$roles_with_permission['id']] = array(
-                'name' => $roles_with_permission['role_name'], 
-                'attributes' => array( 'resource_names=\''.json_encode(array_keys($roles_with_permission['resources'])).'\'')
+                'name' => $roles_with_permission['role_name'],
+                'attributes' => array('resource_names=\'' . json_encode(array_keys($roles_with_permission['resources'])) . '\''),
             );
         }
 
@@ -71,26 +71,27 @@ class Controller_User extends Controller_App
 
     }
 
-    public function action_add(){
+    public function action_add()
+    {
 
         if (!isset($_POST)) {
             Util_Header::redirect($this->_home_location);
         }
-        
+
         $result = array(
-                'success' => false,
-                'errmsgs' => null
+            'success' => false,
+            'errmsgs' => null,
         );
-        
-        foreach ($_POST as &$param){
-            if (is_array($param)){
+
+        foreach ($_POST as &$param) {
+            if (is_array($param)) {
                 continue;
             }
             $param = trim($param);
         }
 
         // check access
-        if (!$_SESSION[SESS_USER_VAR]->can('users.edit')){
+        if (!$_SESSION[SESS_USER_VAR]->can('users.edit')) {
             $result['errmsgs'][] = 'You are not authorized to add user.';
         }
 
@@ -98,73 +99,75 @@ class Controller_User extends Controller_App
         $inputs = $form_inputs['inputs'];
         foreach (array('login', 'display_name', 'email', 'roles') as $field) {
             if (empty($_POST[$field])) {
-                $result['errmsgs'][] = 'Field ['.$inputs[$field]['th'].'] is missing.';
+                $result['errmsgs'][] = 'Field [' . $inputs[$field]['th'] . '] is missing.';
             }
         }
 
         // TODO: put these in model
         $login = trim($_POST['login']);
-        if (!preg_match("/^[A-Za-z0-9_\.]+$/", $login, $output_array)){
+        if (!preg_match("/^[A-Za-z0-9_\.]+$/", $login, $output_array)) {
             $result['errmsgs'][] = 'Login name should be alpha-numeric, underscore, period.';
         }
 
         $email = trim($_POST['email']);
         $email_pattern = '/^(?!(?:(?:\\x22?\\x5C[\\x00-\\x7E]\\x22?)|(?:\\x22?[^\\x5C\\x22]\\x22?)){255,})(?!(?:(?:\\x22?\\x5C[\\x00-\\x7E]\\x22?)|(?:\\x22?[^\\x5C\\x22]\\x22?)){65,}@)(?:(?:[\\x21\\x23-\\x27\\x2A\\x2B\\x2D\\x2F-\\x39\\x3D\\x3F\\x5E-\\x7E]+)|(?:\\x22(?:[\\x01-\\x08\\x0B\\x0C\\x0E-\\x1F\\x21\\x23-\\x5B\\x5D-\\x7F]|(?:\\x5C[\\x00-\\x7F]))*\\x22))(?:\\.(?:(?:[\\x21\\x23-\\x27\\x2A\\x2B\\x2D\\x2F-\\x39\\x3D\\x3F\\x5E-\\x7E]+)|(?:\\x22(?:[\\x01-\\x08\\x0B\\x0C\\x0E-\\x1F\\x21\\x23-\\x5B\\x5D-\\x7F]|(?:\\x5C[\\x00-\\x7F]))*\\x22)))*@(?:(?:(?!.*[^.]{64,})(?:(?:(?:xn--)?[a-z0-9]+(?:-+[a-z0-9]+)*\\.){1,126}){1,}(?:(?:[a-z][a-z0-9]*)|(?:(?:xn--)[a-z0-9]+))(?:-+[a-z0-9]+)*)|(?:\\[(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){7})|(?:(?!(?:.*[a-f0-9][:\\]]){7,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?)))|(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){5}:)|(?:(?!(?:.*[a-f0-9]:){5,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3}:)?)))?(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))(?:\\.(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))){3}))\\]))$/iD';
-        
+
         if (!preg_match($email_pattern, $email)) {
             $result['success'] = false;
             $result['errmsgs'][] = 'Email format is incorrect.';
         }
-        
+
         // check roles
-        $model_accessRights      = new Model_AccessRights();
+        $model_accessRights = new Model_AccessRights();
         $roles_with_permissions = $model_accessRights->get_all_roles_with_permissions();
         $legal_roles = array_keys($roles_with_permissions);
         $role_ids = array();
-        foreach ($_POST['roles'] as $role_id){
-            if (in_array($role_id, $legal_roles)){
+        foreach ($_POST['roles'] as $role_id) {
+            if (in_array($role_id, $legal_roles)) {
                 $role_ids[] = $role_id;
             }
         }
-        if (empty($role_ids)){
+        if (empty($role_ids)) {
             $result['errmsgs'][] = 'Please select role.';
         }
-        
+
         // check if login or email has already exists
         $model_users = new Model_Users();
-        if ($model_users->get_by_email($email)){
-            $result['errmsgs'][] = 'Email ['.$email.'] already exists.';
+        if ($model_users->get_by_email($email)) {
+            $result['errmsgs'][] = 'Email [' . $email . '] already exists.';
         }
-        if ($model_users->get_by_login($login)){
-            $result['errmsgs'][] = 'Login ['.$login.'] already exists.';
+        if ($model_users->get_by_login($login)) {
+            $result['errmsgs'][] = 'Login [' . $login . '] already exists.';
         }
         $display_name = $_POST['display_name'];
-        if (empty($result['errmsgs'])){
-            try{
+        if (empty($result['errmsgs'])) {
+            try {
                 $model_users = new Model_Users();
                 $model_users->open_new_account($login, $email, $role_ids, $display_name);
-                if ($model_users->id){
-                    //$activation_key = $model_users->activation_key;
-                    //$this->_send_activation_email($activation_key, $login, $email, $subject);
+                if ($model_users->id) {
+                    $this->_send_activation_email(
+                        $model_users->activation_key,
+                        $model_users->login,
+                        $model_users->email);
                     $result['success'] = true;
                 } else {
                     $result['success'] = false;
                     $result['errmsgs'][] = 'Unable to add new account.';
                 }
-            } catch (Exception $e){
+            } catch (Exception $e) {
                 $result['success'] = false;
                 $result['errmsgs'][] = $e->getMessage();
             }
         }
 
-        if ($result['success']){
-            $this->_msg = 'Email successfully sent to '.$login.'('.$email.')!';
+        if ($result['success']) {
+            $this->_msg = 'Email successfully sent to ' . $login . '(' . $email . ')!';
         } else {
-            $this->_errmsg = 'Error: <br />'.implode('<br />',$result['errmsgs'] );
+            $this->_errmsg = 'Error: <br />' . implode('<br />', $result['errmsgs']);
         }
         $this->set_msgs();
         Util_Header::redirect($this->_home_location);
-        
+
     }
 
     protected function _get_user_list_table_cols()
@@ -178,6 +181,36 @@ class Controller_User extends Controller_App
             'roles' => 'Roles',
             'permissions' => 'Permissions',
         );
+    }
+
+    protected function _send_activation_email($activation_key, $login, $email)
+    {
+        $subject = USER_ACTIVATION_EMAIL_SUBJECT . $login;
+        $activation_key_link = 'https://' . $_SERVER['SERVER_NAME'] . APP_DIR . "user/activate/key/$activation_key/login/$login/";
+
+        $message = $this->_get_adduser_email_content(array(
+            'activation_key_link' => $activation_key_link));
+        Util_Email::send( array(
+            'to' => $email, 
+            'subject' => $subject, 
+            'message' => $message, 
+            'from' => USER_ACTIVATION_EMAIL_FROM, 
+            'cc' => USER_ACTIVATION_EMAIL_CC
+        ));
+
+    }
+
+    protected function _get_adduser_email_content(array $contents)
+    {
+
+        extract($contents);
+        ob_start();
+        include WEBROOT . 'view/users/activate_email.html';
+        $returned = ob_get_contents();
+        ob_end_clean();
+
+        return $returned;
+
     }
 
 }

@@ -8,6 +8,7 @@ class Controller_Article extends Controller_App
 
         parent::init();
         $this->_home_location = APP_DIR . "article/";
+        $this->_check_access('articles.view');
 
     }
 
@@ -43,6 +44,7 @@ class Controller_Article extends Controller_App
             0 => '',
             'article.`id`' => 'ID',
             'article.`title`' => 'Title',
+            'tags' => 'Tags',
             '`created_user_display_name`' => 'Author',
             'article.`status`' => 'Status',
             'article.`publish_date`' => 'Publish Date',
@@ -98,11 +100,18 @@ class Controller_Article extends Controller_App
             exit;
         }
 
+        $model_tags = new Model_Tags();
         foreach ($articles as $article) {
+            $tags = $model_tags->get_by_article_id($article['id']);
+            if (empty($tags)) {
+                $tags = array();
+            }
+            $tag_names = array_map(function ($tag) {return $tag['name'];}, $tags);
             $row = array();
             $row[] = '<a class="btn btn-primary" href="' . APP_DIR . 'article/edit/id/' . $article['id'] . '"><i class="fa fa-edit"></i></a>';
             $row[] = $article['id'];
             $row[] = $article['title'];
+            $row[] = empty($tags) ? '' : implode(',', $tag_names);
             $row[] = $article['created_user_display_name'];
             $row[] = $article['status'];
             $row[] = $article['publish_date'];
@@ -115,6 +124,7 @@ class Controller_Article extends Controller_App
     protected function _show_article($model_article)
     {
 
+        $model_article->read_tags();
         $form_inputs = Util_Form::get_form_inputs('article');
         $inputs = $form_inputs['inputs'];
 
@@ -124,7 +134,7 @@ class Controller_Article extends Controller_App
         $tag_options = array();
         if (!empty($tags)) {
             foreach ($tags as $tag) {
-                $tag_options[$tag['id']] = array('name' => $tag['name']);
+                $tag_options[] = $tag['name'];
             }
         }
 
@@ -132,10 +142,12 @@ class Controller_Article extends Controller_App
         $inputs['title']['value'] = $model_article->title;
         $inputs['content']['value'] = $model_article->content;
         $inputs['friendly_url']['value'] = rawurldecode($model_article->friendly_url);
-        $inputs['tags']['options'] = $tag_options;
-        $inputs['tags']['value'] = array();
+
         if ($model_article->tags) {
-            $inputs['tags']['value'] = array_keys($model_article->tags);
+            $inputs['tags']['value'] = implode(', ',
+                array_map(function ($tag) {
+                    return $tag['name'];
+                }, $model_article->tags));
         }
 
         // set required input fields
@@ -145,13 +157,14 @@ class Controller_Article extends Controller_App
 
         $this->_view
             ->set_tag_body_contents('class="article"')
+            ->set_var('tag_options', $tag_options)
             ->set_var('article', $model_article)
             ->set_var('inputs', $inputs)
             ->set_var('msg', $this->_msg)
             ->set_var('errmsg', $this->_errmsg)
             ->add_js('foot', "https://code.jquery.com/ui/1.12.1/jquery-ui.min.js")
             ->add_js('foot', "https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js")
-            ->add_js('head', "https://cdn.jsdelivr.net/npm/tinymce@4.8.5/tinymce.min.js")
+            ->add_js('foot', "https://cdn.jsdelivr.net/npm/tinymce@4.8.5/tinymce.min.js")
             ->add_js('foot', DIR_ASSETS_JS . 'article.js')
             ->add_css("https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css")
             ->add_css("https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css");
@@ -236,6 +249,11 @@ class Controller_Article extends Controller_App
             $result['err_msg'][] = "Title must not be empty.";
         }
 
+        // check access
+        if (!$_SESSION[SESS_USER_VAR]->can('articles.edit')) {
+            $result['errmsgs'][] = 'You are not authorized to add/edit articles.';
+        }
+
         if (!empty($result['err_msg'])) {
             return $result;
         }
@@ -283,8 +301,15 @@ class Controller_Article extends Controller_App
             $article['publish_date'] = null;
         }
 
+        // tags
+        $tag_names = array();
+        foreach (explode(',', $_POST['tags']) as $tag) {
+            $tag_names[] = trim($tag);
+        }
+
         try {
             $model_article->from_array($article)->save();
+            $model_article->save_tags($tag_names);
             $result['success'] = true;
         } catch (Exception $e) {
             $result['err_msg'] = $e->getMessage();

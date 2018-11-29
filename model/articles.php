@@ -12,6 +12,66 @@ class Model_Articles extends Base_Model
     protected $_modified_date;
     protected $_created_by;
     protected $_modified_by;
+    protected $_tags;
+    
+    public function read_tags() {
+
+        $model_tags = new Model_Tags();
+        $this->_tags = $model_tags->get_by_article_id($this->_id);
+
+    }
+
+    public function save_tags(array $tag_names) 
+    {
+        $tag_names = $this->_sanitize($tag_names);
+        $tag_names = array_filter($tag_names);
+        $tag_friendly_urls = array();
+        
+        // delete all associated article sections
+        $delete = "DELETE FROM `article_tags` WHERE `article_id` = ? ";
+        $mysqli = $this->_get_db_connection();
+        if (!$stmt = $mysqli->prepare($delete)){
+            throw Exception("Prepare statement failed.\nQuery: $delete \n{$mysqli->error}\n\n");
+        }
+        $stmt->bind_param('i', $this->_id);
+        if (false === ($result = $stmt->execute())){
+            throw Exception("Execute statement failed.\nQuery: $delete \n{$mysqli->error}\n\n");
+        }
+
+        $update_cnt = 0;
+
+        // insert tags if not exists already
+        $model_tags = new Model_Tags();
+        foreach ($tag_names as $tag_name) {
+            $friendly_url = Util_File::convert_url($tag_name);
+            $tag_friendly_urls[] = $friendly_url;
+            $existing_tags = $model_tags->get_by_friendly_url($friendly_url);
+            if (!empty($existing_tags)) {
+                continue;
+            }
+            $model_tags->from_array(array(
+                'friendly_url' => $friendly_url, 
+                'name' => trim($tag_name),
+                'created_by' => $_SESSION[SESS_USER_VAR]->id
+            ))->save();
+        }
+
+        $insert = "INSERT INTO `article_tags` (`article_id`, `tag_id`) ".
+                "SELECT ?, tag.`id` FROM `tags` as tag WHERE tag.`friendly_url` = ?";
+        if (!$stmt = $mysqli->prepare($insert)){
+            throw Exception("Prepare statement failed.\nQuery: $insert \n{$mysqli->error}\n\n");
+        }
+        foreach ($tag_friendly_urls as $tag_friendly_url){
+            $stmt->bind_param('is', $this->_id, $tag_friendly_url);
+            if (false === ($result = $stmt->execute())){
+                throw Exception("Execute statement failed.\nQuery: $insert \n{$mysqli->error}\n\n");
+            }
+            $update_cnt++;
+        }
+        $mysqli->close();
+        
+        return $update_cnt;
+    }
 
     public function get_by_friendly_url($friendly_url)
     {

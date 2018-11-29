@@ -27,17 +27,28 @@
                 </div>
                 <div class="form-group">
                     <div class="form-row">
+                        <?php echo Util_Form::spit_out_input_label($inputs, 'tags'); ?>
+                        <?php echo Util_Form::spit_out_form_input($inputs, 'tags', 'text_tags'); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
                         <?php echo Util_Form::spit_out_input_label($inputs, 'friendly_url'); ?>
                         <?php echo Util_Form::spit_out_form_input($inputs, 'friendly_url'); ?>
                     </div>
                 </div>
+                <?php if ($_SESSION[SESS_USER_VAR]->can('articles.edit')) { ?>
                 <div class="form-group">
                     <div class="form-row">
                         <input name="id" type="hidden" value="<?php if ($article->id) echo $article->id;?>" />
                         <input class="btn btn-primary" type="submit" value="Save Article" />
                     </div>
                 </div>
+                <?php } ?>
             </form>
         </div>
     </div>
 </main><!-- /.container -->
+<script>
+    var availableTags = <?php echo json_encode($tag_options) ?>;
+</script>

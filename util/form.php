@@ -49,6 +49,7 @@ class Util_Form
         foreach (array(
             'title' => 'Title',
             'friendly_url' => 'Friendly URL',
+            'tags' => 'Tags (comma seperated)'
         ) as $name => $display_name) {
             $inputs[$name]['th'] = $display_name;
             $inputs[$name]['input'] = 'text';
@@ -59,7 +60,6 @@ class Util_Form
 
         /* selects */
         foreach (array(
-            'tags' => 'Tags',
             'status' => 'Status',
         ) as $name => $display_name) {
             $inputs[$name]['th'] = $display_name;
@@ -68,9 +68,6 @@ class Util_Form
             $inputs[$name]['options'] = array();
             $inputs[$name]['name'] = $name;
         }
-        $inputs['tags']['is_multiple'] = true;
-        $inputs['tags']['has_placeholder'] = true;
-        $inputs['tags']['name'] = 'tag_ids[]';
 
         $inputs['status']['value'] = 'pending';
         $inputs['status']['has_placeholder'] = false;

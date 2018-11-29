@@ -9,4 +9,8 @@ define('DIR_ASSETS_IMG',   DIR_ASSETS.'images/');
 
 define('USER_PASSWORD_SALT', '6roHjBijWtztkUHH');
 
+define('USER_ACTIVATION_EMAIL_SUBJECT', 'Simple PHP MVC CMS Activation Email for User: ');
+define('USER_ACTIVATION_EMAIL_FROM', 'XXXXXXXXX@gmail.com');
+define('USER_ACTIVATION_EMAIL_CC', null);
+
 ?>
